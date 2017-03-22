@@ -10,6 +10,7 @@ let runSequence = require("run-sequence");  // runs tasks
 let tasks = {
     clean: "clean",
     default: "default",
+    copyHtml: "copy-html",
     build: "build",
     compileLess: "less",
     createServer: "serve"
@@ -23,7 +24,7 @@ var paths = {
     pages: ['app/**/*.html']
 };
 
-gulp.task("copy-html", function () {
+gulp.task(tasks.copyHtml, function () {
     return gulp.src(paths.pages)
         .pipe(gulp.dest("Dest"));
 });
@@ -37,7 +38,7 @@ gulp.task(tasks.compileLess, () => {
     return require("./gulp/less")(src, dest);
 });
 
-gulp.task("build", ["copy-html"], function () {
+gulp.task("build", function () {
     return browserify({
         basedir: '.',
         debug: true,
@@ -70,7 +71,7 @@ gulp.task(tasks.createServer, () => {
 });
 
 gulp.task(tasks.default, (done) => {
-    runSequence(tasks.build, tasks.createServer, done);
+    runSequence(tasks.copyHtml,tasks.compileLess, tasks.build, tasks.createServer, done);
 });
 
 

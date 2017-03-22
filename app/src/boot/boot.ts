@@ -10,6 +10,7 @@ import 'angular-sanitize';
 
 "use strict";
 import {RootComponent} from "./rootComponent";
+import {SidebarComponent} from "../component/sidebar/sidebar";
 
 // Register our module and it's dependencies
 export const angularApp = angular.module('MaterialStart', ['ngMaterial', 'ngSanitize'])
@@ -34,4 +35,5 @@ export const angularApp = angular.module('MaterialStart', ['ngMaterial', 'ngSani
 angularApp.component(UsersListComponent.componentName, UsersListComponent.componentConfig);
 angularApp.component(UserDetailsComponent.componentName, UserDetailsComponent.componentConfig);*/
 angularApp.component(RootComponent.componentName, RootComponent.componentConfig);
+angularApp.component(SidebarComponent.componentName, SidebarComponent.componentConfig);
 
