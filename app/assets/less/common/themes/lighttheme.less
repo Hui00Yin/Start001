@@ -1,0 +1,152 @@
+/* Light Theme */
+
+/* Colour settings */
+@Background:                @BleachedShell;
+@GlobeNavIcon:              @StormCloud;
+@Title:                     @BlackFlag;
+@GroupLinks:                @RainCloud;
+@AddGroup:                  @BlueFish;
+
+/* Text */
+@LightText:                 @BleachedShell;
+@RegularText:               @Orca;
+@MediumText:                @BlackFlag;
+@StrongText:                @Black; 
+@DarkText:                  @BlackFlag; 
+@ReversedText:              @BleachedShell;
+@MediumReversedText:        darken(@BleachedShell,20%);
+@StrongReversedText:        darken(@BleachedShell,30%);   
+      
+@font-glyph:                @StrongReversedText;
+
+//basic colors
+@red:                       @ScubaStripe;
+@blue:                      @BlueFish;
+@yellow:                    @SunFish;
+@orange:                    @ClownFish;
+@green:                     @SeaWeed; 
+@purple:                    @SunsetSky;
+@medblue:                   @Lagoon;
+
+//header 
+@nav-menu-background:		@Pier;
+@nav-submenu-background:	@BleachedShell;
+@nav-borders:				@WeatheredHull;
+@nav-icons:                 @Stingray;
+@nav-active-app:			@SunFish;
+
+
+//Object States
+@Selected:                  @StarFish;
+@on-air:                    @GlowFish; 
+@off-air:                   @Narwhal;
+@setup:                     lighten(@yellow,10%);
+@off:                       @Narwhal;
+@command:                   @BlueFish;
+
+// scrollbar styles
+@ScrollbarBase:			    @RainCloud;
+@ScrollbarTrack:			@Pier;
+@ScrollbarTrackBorder:		darken(@RainCloud,5%);
+@ScrollbarThumb:			@Dolphin;
+@ScrollbarThumbBorder:		@White;
+@ScrollbarThumbHover:		darken(@Dolphin,5%);
+
+/*InputMixin*/
+@border:                    @RainCloud;
+@reverse-border:            @StormCloud;
+@BorderFocus:               @BlueFish;
+@separator:                 lighten(@border,10%);
+
+//Buttons
+@IconButtonBG:              @Stingray;
+@DataButton:                @CoralStone;
+@DisabledButton:            @Porpoise;
+@primaryAction:             @BlueFish;
+@SecondaryAction:           @SteelGrey;
+
+//MD
+@md-optionhover:            @RainCloud;
+
+/*<MD Modal*/
+@color-modal-bg: darken(@Pier, 3%);
+@color-modal-border: darken(@RainCloud, 10%);
+@color-modal-header: fade(@WeatheredHull, 60%);
+@color-modal-title: @LightText;
+@color-modal-x: @LightText;
+@color-modal-x-hover: lighten(@color-modal-x, 10%);
+@color-modal-text: @RegularText;
+@color-modal-zone: @RainCloud;
+@color-modal-prompt-text: fade(@RegularText, 50%);
+@color-modal-header:@Porpoise; 
+
+/* Keyword search and controls */
+@KeywordBackground:			@BleachedShell;
+@KeywordBackgroundHover:	@BleachedShell;
+@KeywordBorder:				lighten(@Dolphin, 10%);
+@KeywordBorderFocus:		@BlueFish;
+@Keyword-search-icon:       @WeatheredHull;
+@KeywordSearchText:         @BlackFlag;
+
+/* Canvas */
+@CanvasBackground:          @Pier;
+@ResizeBlock:               @blue;
+@CanvasTabRow:              darken(@RainCloud,5%);
+@CanvasToolbar:             darken(@RainCloud,5%);
+@CanvasToolbarIcons:        @Stingray;
+@objectborder:              darken(@border,10%);
+
+/*Object Panel*/
+@PanelBackground:           @Pier;
+@SelectPanelIconsText:      @Orca;
+@ObjectBorder:              @RainCloud;    
+
+/* Sidebar */
+@SidebarDock:				darken(@Pier,5%);
+@SidebarCollapseIcon:		@blue;
+@SidebarTabContainer:		@PanelBackground;
+@SidebarInsetContainer:     @RainCloud;
+@SidebarUnselectedTitle:	@Porpoise;
+@SidebarTab:				darken(@PanelBackground,5%);
+@SidebarSelectedTitle:		@Stingray;
+@SidebarTextBox:			@Stingray;
+
+/* InfoPanel */
+@InfoPanelFile:				@Dolphin;
+@InfoPanelFileHover:		@Dolphin;
+@InfoPanelSubMenu:			@RainCloud;
+@InfoPanelSubMenuBorder:	@border;
+@InfoPanelFooterHover:		@BleachedShell;
+@InfoPanelMediaArrow:       @CoralStone;
+
+/* Content Browser */
+@BrowserHeader:				@WeatheredHull;
+@BrowserHeaderText:			@Orca;
+@BrowserContent:			Transparent;
+@BrowserContentOdd:			@RainCloud;
+@BrowserContentHover:		@BleachedShell;
+@HoverText:                 @Orca;
+
+
+/* Macro Builder */
+@MacroHeader:               @WeatheredHull;
+@TimelineBorders:           @BleachedShell;
+@TimelineScaleLines:        @RainCloud;
+@TimelineNameBoxes:         @RainCloud;
+@VisibleColor:              lighten(@SteelGrey,20%);
+@MacroSelected:             @BlueFish;
+@fixedToolbar:              darken(@PanelBackground,5%);    
+
+/* Layout Browser */
+@ThumbnailBg:              @RainCloud;
+
+/* Shadows */
+@shadow-ui-s-hard:          0px 2px 0px rgba(0,0,0,0.3);    // south hard shadow
+@shadow-ui-sw-hard:         -4px 2px 0px rgba(0,0,0,0.2);   // south west hard shadow
+@shadow-soft:               0px 2px 8px rgba(0,0,0,0.3);    // south soft shadow
+@shadow-soft-s:             0px 2px 8px rgba(0,0,0,0.3);    // south soft shadow
+@shadow-soft-n:             0px -4px 8px rgba(0,0,0,0.3);    // south soft shadow
+@SideShadowBar:             -5px 0 10px -4px rgba(0, 0, 0, 0.3);
+
+/*select*/
+@select-hover:             @BlueFish;

@@ -1,0 +1,173 @@
+@import "reset.less";
+@import "colors.less";
+@import "fonts.less";
+@import "glyphs.less";
+@import "angular-materials.less";
+@import "font-awesome/font-awesome.less";
+@import "modal.less";
+@import "themes/darktheme.less";
+
+html, body {
+    background-color:@Background;
+    overflow-y: hidden;//disables scrollbar on menu pop-ups. This app doesn't use page scrolling
+    }
+
+.default-font (){
+	font-family: 'Roboto', sans-serif;
+	font-weight: 100;
+    line-height: 1.6rem;
+}
+
+body {
+    .default-font;
+}
+
+.centerself{
+    margin: auto;
+}
+
+.huibox-sizing(@borderbox) when (@borderbox){
+    box-sizing: border-box ;
+}
+
+.huiborder-top(@color:black, @width: 5px, @style: solid, @borderbox:true){
+    .huibox-sizing(@borderbox);
+    border-top: @style @width @color;
+}
+
+.huiborder-top{
+    .huiborder-top();
+}
+
+.huiborder-bottom(@color:black, @width: 5px, @style: solid, @borderbox:true){
+    .huibox-sizing(@borderbox);
+    border-bottom: @style @width @color;
+}
+
+.huiborder-bottom{
+    .huiborder-bottom();
+}
+
+.huiborder-vertical(@color:black, @width: 5px, @style: solid, @borderbox:true){
+    .huibox-sizing(@borderbox);
+    border-left: @style @width @color;
+    border-right: @style @width @color;        
+}
+
+.huiborder-vertical{
+    .huiborder-vertical();
+}
+
+.huiborder-left(@color:black, @width: 5px, @style: solid, @borderbox:true){
+    .huibox-sizing(@borderbox);
+    border-left: @style @width @color;
+}
+
+.huiborder-left{
+    .huiborder-left();
+}
+
+.huiborder-right(@color:black, @width: 5px, @style: solid, @borderbox:true){
+    .huibox-sizing(@borderbox);
+    border-right: @style @width @color;
+}
+
+.huiborder-right{
+    .huiborder-right();
+}
+
+.huiborder(@color:black, @width: 5px, @style: solid, @borderbox:true){
+    .huibox-sizing(@borderbox);
+    border:@style @width @color;
+}
+
+.huiborder{
+    .huiborder();
+}
+
+.flex-row{
+	display: flex;
+	flex-flow: row nowrap;
+}
+
+.flex-column{
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+#root {
+    height: 100vh;
+    width: 100vw;
+    -webkit-font-smoothing: antialiased;
+	background-color: gray;
+    display:flex;
+    align-items: stretch;
+    -webkit-align-items: stretch;
+	color: ghostwhite;
+    overflow:hidden;
+    box-sizing: border-box ;
+}
+
+.inner{
+    border: 2px solid blanchedalmond;
+}
+
+#left-container{
+	flex: 1 1 auto;
+	height: 100%;
+
+    .header{
+        flex: 0 1 auto;
+        height: 50px;
+        background-color: black;
+        
+    }
+
+    .main{
+    	flex: 1 1 65%;
+    }
+
+    .macrobar{
+        flex: 0 1 300px;
+    }
+
+    .nav {
+        width: 300px;
+        flex: none;
+
+        > p{
+            .huiborder-bottom(black, 1px);
+        }
+    }
+
+    .title{
+        position: relative;
+        .huiborder-bottom(black, 1px);
+
+        .left{
+            display: inline-block;
+            position: relative;
+            left: 10px;
+        }
+
+        .rightpart{
+            display: inline-block;
+            position: absolute;
+            right: 3px;
+        }
+    }
+
+    .canvas{
+        flex: auto;
+    } 
+}
+
+#sidebar{
+	flex:1 1 auto;
+    height: 100%;
+	max-width: 400px;
+    position: relative;
+}
+
+
+

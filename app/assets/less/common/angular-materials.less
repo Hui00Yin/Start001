@@ -1,0 +1,286 @@
+// Input Mixin
+.input-mixin {
+    outline:0;
+    background-color: @KeywordBackground;
+    border: 1px solid @KeywordBorder;
+    box-shadow: 0px 1px @shadow-soft;
+    color: @KeywordSearchText;
+    border-radius: 0;
+    padding: 8px;
+    outline: 0;
+    cursor:pointer;
+    transition: background 0.2s, 
+    border 0.2s;
+
+    &:hover{
+            background: @KeywordBackgroundHover;
+            border: 1px solid @BorderFocus;
+    }
+
+    &[data-style-disabled="true"] {
+        border: 1px solid @KeywordBorder;
+        background-color: darken(@KeywordBackground, 20%);
+        cursor: default;
+        color: lighten(@KeywordSearchText, 40%);
+        span {
+            color: lighten(@KeywordSearchText, 40%);
+        }
+        md-select-value {
+            background-image: none !important;
+            margin-bottom: 0px !important;
+            span:first-child {
+                transform: translate(0,1px);
+            }
+        }
+    }
+
+    &[data-style-disabled="true"]:hover{
+        border: 1px solid @KeywordBorder;
+        background-color: darken(@KeywordBackground, 20%);
+    } 
+
+    &:focus{
+    }
+    
+    &::-webkit-input-placeholder {
+        font-style: italic;
+    }
+    &:-moz-placeholder {
+        font-style: italic;  
+    }
+    &::-moz-placeholder {
+        font-style: italic;  
+    }
+    &:-ms-input-placeholder {  
+        font-style: italic; 
+    }
+}
+
+[data-style-input] {
+    .input-mixin();
+}
+
+/* Regular Inputs */
+
+[data-style-dropdown] {
+    .input-mixin();
+}
+
+[data-style-dropdown~="live"] {
+    border: 1px solid @KeywordBorderFocus;
+    color: @RegularText;
+    background: @KeywordBorderFocus;
+}
+
+[data-style-dropdown~="time"] {
+    transform: translate(0px,1px);
+    margin: 0;
+}
+
+[data-style-dropdown~="time"] {
+    transform: translate(0px,1px);
+    margin: 0;
+}
+
+[data-style-dropdown~="filetype"] {
+    transform: translate(0px,1px);
+    margin: 0;
+}
+
+[data-style-arrow] {
+    font-size: 1.2rem;
+    transform: translate(0,2px);
+    padding-left: 10px;
+}
+
+// material checkbox
+
+md-checkbox {
+    margin-bottom: 0px;
+    .md-label{
+           margin-top: 4px;
+    }
+}
+
+md-checkbox.md-default-theme.md-checked .md-icon, md-checkbox.md-checked .md-icon
+{background-color: @BlueFish !important;}
+md-checkbox.md-default-theme.md-checked .md-ink-ripple, md-checkbox.md-checked .md-ink-ripple
+{
+  color:fade(@BlueFish,80%);  
+}
+md-checkbox .md-icon{
+    border: 1px solid @KeywordBorder!important;
+    color: @KeywordSearchText;
+    border-radius: 4px;
+    cursor:pointer;
+    padding: 0.5rem;
+    transition: background 0.2s, border 0.2s;
+    &:hover{
+            background: @KeywordBackgroundHover !important;
+            border: 1px solid @KeywordBorderFocus !important;
+    }
+
+    &:focus{
+            border: 1px solid @KeywordBorderFocus;
+    }
+}
+md-checkbox.md-checked .md-icon:after{
+        left: 5.67px!important;
+    top: 1.22px!important;
+}
+md-select-menu[multiple] md-option._md-checkbox-enabled, ._md-icon {
+    background-color: @KeywordBackground;
+    border: 1px solid @KeywordBackgroundHover;
+    color: @KeywordSearchText;
+    border-radius: 0;
+    cursor:pointer;
+    padding: 0.5rem;
+    transition: background 0.2s, border 0.2s;
+    &:hover{
+            background: @KeywordBackgroundHover !important;
+            border: 1px solid @KeywordBorderFocus !important;
+    }
+
+    &:focus{
+            border: 1px solid @KeywordBorderFocus;
+    }
+}
+
+
+
+md-menu-item{
+    button .md-button{
+    color: @DarkText!important;
+    }
+}
+
+._md-container{
+    border: 1px solid transparent;
+    color: @RegularText;
+    border-radius: 5px;
+    margin-top: -1px;
+    padding: 10px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    transition: background 0.2s, border 0.2s;
+    &:hover{
+            border: 1px solid @KeywordBorder !important;
+    }
+
+    &:focus{
+            border: 1px solid @KeywordBorder;
+    }
+}
+
+md-menu-item {
+    .md-button md-ink-ripple{
+color:@DarkText!important;
+    }
+    }
+
+/*----------- MD SWITCH -------------- */
+
+    md-switch.md-default-theme.md-checked .md-bar, md-switch.md-checked .md-bar
+    {background-color: fade(@blue,50%);}
+    md-switch.md-default-theme.md-checked .md-ink-ripple, md-switch.md-checked .md-ink-ripple
+    {background-color:@blue;
+    color:@blue; }
+    
+// material dropdown
+
+md-input-container{
+    margin: 0em 0;
+    padding:0;
+    md-select {
+        .input-mixin();
+        padding:0px;
+        margin: 0px !important;
+}
+
+}
+.md-button md-ink-ripple{
+    color:@LightText!important;
+}
+.md-button[disabled]{
+    cursor: not-allowed;
+    opacity: 0.5;
+    background: darken(@DisabledButton, 20%) !important;
+}
+
+._md-select-menu-container._md-active {
+    width: 200px;
+}
+
+.md-select-value{
+    .md-text, span{
+        color: @MediumText; 
+    }
+}
+
+._md-select-value, md-select-value {
+    border: none;
+    // display: -webkit-inline-box;
+    width: auto;
+     padding: 0 0 3px 5px !important;
+    border: none !important;
+    min-height: 29px!important;
+}
+
+._md-select-icon, md-select-icon {
+    transition: background 0.2s;
+    color: @blue;
+    &:hover{
+            background: @KeywordBackgroundHover !important;
+    }
+}
+
+md-select:not([disabled]):focus ._md-select-value {
+    border: none;
+    display: -webkit-inline-box;
+}
+.md-select-menu-container {
+    z-index: 2000;
+}
+
+.md-select-menu-container.md-active {
+    min-width: 0px;
+}
+
+md-backdrop.md-select-backdrop {
+    z-index: 2000;
+}
+
+md-select {
+    margin: 0;
+}
+
+.md-select-value .md-text, .md-select-value span{
+    color:@DarkText;
+}
+
+.md-dialog-content{
+     color: @RegularText!important;
+     span{
+         input {
+             margin:5px
+         }
+     }
+     div{
+     padding-top:5px; 
+        i{
+            margin-right:5px;
+        }
+     }
+}
+
+md-option {
+    &:hover {
+        background: @md-optionhover;
+    }
+}
+
+// rotate glyph on open
+[data-toggle-sec~="open"] {
+    transform: rotate(90deg);
+}

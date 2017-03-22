@@ -1,0 +1,72 @@
+{
+  "name": "angularjstemplate",
+  "version": "1.0.0",
+  "description": "Basic Angular 1.x template project with TypeScript moving forward with Angular2",
+  "author": "Hui Yin",
+  "license": "MIT",
+  "repository": {
+    "url": "",
+    "type": "git"
+  },
+  "tags": [
+    "angular",
+    "typescript",
+    "Definitely typed"
+  ],
+  "scripts": {
+    "postinstall": "tsd install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "angular": "1.5.5",
+    "angular-animate": "1.5.5",
+    "angular-aria": "1.5.5",
+    "angular-material": "1.0.8",
+    "angular-messages": "1.5.5",
+    "angular-route": "1.5.5",
+    "jquery": "2.2.1",
+    "postal": "2.0.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.5.5",
+    "angular-sanitize": "1.5.5",
+    "browser-sync": "2.11.2",
+    "browserify": "^14.1.0",
+    "live-server": "1.1.0",
+    "chromedriver-html5-dragdrop": "0.2.0",
+    "del": "2.2.0",
+    "glob": "7.0.3",
+    "gulp": "3.9.1",
+    "gulp-angular-templatecache": "1.8.0",
+    "gulp-clean-css": "2.0.6",
+    "gulp-concat": "2.6.0",
+    "gulp-header": "1.8.2",
+    "gulp-less": "3.0.5",
+    "gulp-preprocess": "2.0.0",
+    "gulp-protractor": "2.4.0",
+    "gulp-rename": "1.2.2",
+    "gulp-sourcemaps": "1.6.0",
+    "gulp-typescript": "2.13.6",
+    "gulp-uglify": "1.5.3",
+    "gulp-util": "3.0.7",
+    "gulp-watch": "4.3.5",
+    "jasmine": "2.4.1",
+    "jasmine-jquery": "2.1.1",
+    "karma": "1.2.0",
+    "karma-chrome-launcher": "1.0.1",
+    "karma-coverage": "1.1.1",
+    "karma-htmlfile-reporter": "0.3.4",
+    "karma-jasmine": "1.0.2",
+    "karma-phantomjs-launcher": "1.0.0",
+    "phantomjs-prebuilt": "2.1.7",
+    "protractor": "3.3.0",
+    "protractor-jasmine2-html-reporter": "0.0.6",
+    "remap-istanbul": "0.6.4",
+    "run-sequence": "1.2.2",
+    "ts-node": "^0.5.5",
+    "tsify": "^3.0.1",
+    "typescript": "^1.7.5",
+    "vinyl-source-stream": "^1.1.0",
+    "yargs": "4.7.1"
+  }
+}

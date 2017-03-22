@@ -1,0 +1,9 @@
+## NPM Modules
+node_modules/
+
+## Type Definitions but will include custom typings
+tools/typings/tsd
+app/jspm_packages
+Dest/
+
+

@@ -1,0 +1,70 @@
+// ===================================
+// Modal Behaviour - overrides Angular Material
+// ===================================
+
+md-dialog {
+    background: @color-modal-bg;
+    border: 1px solid @color-modal-border;
+    border-radius: 4px;
+    max-height: 90%;
+    z-index: 111;
+    color:@color-modal-text;
+    min-width: 300px;
+}
+dialog-header {
+    background: @color-modal-header;
+    padding: 4px 4px 4px 8px;
+    height: 3.5rem;
+}
+md-toolbar{
+    max-height: 40px;
+    height: 40px;
+    min-height: 40px;
+     }
+     .md-toolbar-tools{    
+         background: @color-modal-header!important;
+    color:@color-modal-title!important;}
+md-toolbar.md-default-theme:not(.md-menu-toolbar), md-toolbar:not(.md-menu-toolbar),{
+    background: @color-modal-header!important;
+    color:@color-modal-title!important;
+    height: 40px;
+}
+md-dialog-content{
+    padding: 1em;
+    font-size: 1.2rem;
+
+    span {
+        margin-bottom: 1em;
+    }
+    div i::before{
+        padding-right:0.5em;
+        color:@red;
+    }
+}
+.md-dialog-container{
+    z-index: 101;
+}
+
+[data-style-modal-header-title] {
+    color: @color-modal-title;    
+    display: inline-block;
+    margin: 0.5rem 0;
+    font-size: 18px; 
+}
+
+[data-style-modal-header-x] {
+    color: @color-modal-x;
+    float: right;
+    font-size: 20px;
+    margin: 5px;
+	cursor: pointer;
+    
+    &:hover {
+        color: @color-modal-x-hover;
+    }
+}
+md-dialog-actions{
+    [data-style-button]{
+        padding:0px;
+    }
+}
