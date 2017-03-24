@@ -38,4 +38,25 @@ export class ContentTabComponent {
 
   $onChanges(changes){
   }
+
+  private dragStart = (event) => {
+            let fileName = event.target.children[0].innerText;
+            let type = event.target.children[1].innerText;
+            
+            /* send a message to others.
+            this.msg.APP.DragContentStart.publish(_.findIndex(this.allItems, { Name: fileName, Type: type }));
+            */
+        }
 }
+
+export function DraggableContentDirective(): angular.IDirective {
+        return {
+            template: "",
+            transclude: true,
+            link: (scope: any, elem, attrs, ctrl) => {
+                elem
+                    .unbind()
+                    .bind("dragstart", scope.$ctrl.dragStart)
+            }
+        };
+    }

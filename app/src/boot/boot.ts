@@ -11,7 +11,7 @@ import 'angular-sanitize';
 "use strict";
 import {RootComponent} from "./rootComponent";
 import {SidebarComponent} from "../component/sidebar/sidebar";
-import {ContentTabComponent} from "../component/sidebar/contentTab/content";
+import {ContentTabComponent,DraggableContentDirective} from "../component/sidebar/contentTab/content";
 import {ContentDataService} from "../services/content.service"
 
 // Register our module and it's dependencies
@@ -34,8 +34,10 @@ export const angularApp = angular.module('MaterialStart', ['ngMaterial', 'ngSani
 
 // Register all of our components
 angularApp.component(RootComponent.componentName, RootComponent.componentConfig)
-          .component(SidebarComponent.componentName, SidebarComponent.componentConfig)
-          .component(ContentTabComponent.componentName, ContentTabComponent.componentConfig);
+          .component(SidebarComponent.componentName, SidebarComponent.componentConfig);
+
+angularApp.component(ContentTabComponent.componentName, ContentTabComponent.componentConfig)
+          .directive("draggableContentRow", DraggableContentDirective);
 
 angularApp.service("contentService", ContentDataService);
 

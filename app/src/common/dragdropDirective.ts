@@ -1,63 +1,46 @@
 export function DragAndDrop(): ng.IDirective {
     return {
         restrict: 'A',
-
         controller: DragAndDrop,
         controllerAs: 'DnD',
 
-        link: (scope: ng.IScope, element: ng.IAugmentedJQuery, attributes: ng.IAttributes, controller: IMyDirectiveController): void => {
-            let url = controller.getUrl();
-            element.text('Current URL: ' + url);
+        link: ($scope: ng.IScope, $element: ng.IAugmentedJQuery, attributes: ng.IAttributes, controller: DnDController): void => {
+            var isDragHandleUsed = false,
+            dragHandleClass,
+            draggingClass = this.$attrs.draggingClass || 'on-dragging',
+            dragTarget;
+
+        this.$element.attr('draggable', false);
+
+        this.$this.$scope.$watch(this.$attrs.uiDraggable, function(newValue) {
+            if (newValue) {
+                this.$element.attr('draggable', newValue);
+                this.$element.bind('dragend', controller.dragendHandler);
+                this.$element.bind('dragstart', controller.dragstartHandler);
+            }
+            else {
+                this.$element.removeAttr('draggable');
+                this.$element.unbind('dragend', controller.dragendHandler);
+                this.$element.unbind('dragstart', controller.dragstartHandler);
+            }
+
+        });
+
+        if (angular.isString(this.$attrs.dragHandleClass)) {
+            isDragHandleUsed = true;
+            dragHandleClass = this.$attrs.dragHandleClass.trim() || 'drag-handle';
+
+            this.$element.bind('mousedown', function(e) {
+                dragTarget = e.target;
+            });
+        }
         }
     };
 }
 
 export class DnDController{
-    static $inject = ['$scope', '$element', '$attrs'];
-    constructor(private $scope, private $element, private $attrs) {
-    }
-
-    private dragendHandler(e) {
-        if(e.originalEvent) {
-            e.dataTransfer = e.originalEvent.dataTransfer;
-        }
-
-        setTimeout(function() {
-            this.$element.unbind('$destroy', this.dragendHandler);
-        }, 0);
-        var sendChannel = this.$attrs.dragChannel || 'defaultchannel';
-        $rootScope.$broadcast('ANGULAR_DRAG_END', e, sendChannel);
-
-        determineEffectAllowed(e);
-
-        if (e.dataTransfer && e.dataTransfer.dropEffect !== 'none') {
-            if (attrs.onDropSuccess) {
-                var onDropSuccessFn = $parse(attrs.onDropSuccess);
-                scope.$evalAsync(function() {
-                    onDropSuccessFn(scope, {$event: e});
-                });
-            }
-        }else if (e.dataTransfer && e.dataTransfer.dropEffect === 'none'){
-            if (attrs.onDropFailure) {
-                var onDropFailureFn = $parse(attrs.onDropFailure);
-                scope.$evalAsync(function() {
-                    onDropFailureFn(scope, {$event: e});
-                });
-            }
-        }
-        element.removeClass(draggingClass);
-    }
-}
-
-export class DragDropDirective implements ng.IDirective{
-    // Define our AppComponent's name
-    static directiveName:string = "uidragDrop";
-
-  /*
-    * This static method is needed to return instance
-    */
-    static instance() : ng.IDirective {
-        return new DragDropDirective;
+    static $inject = ['$parse', '$rootscope', '$dragImage','$scope', '$element', '$attrs'];
+    constructor(private $parse, private $rootscope, private $dragImage, private $scope, private $element, private $attrs) {
     }
 
     private isDnDsSupported() {
@@ -80,74 +63,142 @@ export class DragDropDirective implements ng.IDirective{
         }
     }
 
-    static $inject = ['$parse', '$rootScope', '$dragImage'];
-    constructor($parse, $rootScope, $dragImage) {
-        
+    public dragendHandler(e) {
+        if(e.originalEvent) {
+            e.dataTransfer = e.originalEvent.dataTransfer;
+        }
+
+        setTimeout(function() {
+            this.$element.unbind('$destroy', this.dragendHandler);
+        }, 0);
+        var sendChannel = this.$attrs.dragChannel || 'defaultchannel';
+        this.$rootscope.$broadcast('ANGULAR_DRAG_END', e, sendChannel);
+
+        this.determineEffectAllowed(e);
+
+        if (e.dataTransfer && e.dataTransfer.dropEffect !== 'none') {
+            if (this.$attrs.onDropSuccess) {
+                var onDropSuccessFn = this.$parse(this.$attrs.onDropSuccess);
+                this.$scope.$evalAsync(function() {
+                    onDropSuccessFn(this.$scope, {$event: e});
+                });
+            }
+        }else if (e.dataTransfer && e.dataTransfer.dropEffect === 'none'){
+            if (this.$attrs.onDropFailure) {
+                var onDropFailureFn = this.$parse(this.$attrs.onDropFailure);
+                this.$scope.$evalAsync(function() {
+                    onDropFailureFn(this.$scope, {$event: e});
+                });
+            }
+        }
+        this.$element.removeClass(draggingClass);
+    }
+
+    public setDragElement(e, dragImageElementId) {
+        var dragImageElementFn;
+
+        if(e.originalEvent) {
+            e.dataTransfer = e.originalEvent.dataTransfer;
+        }
+
+        dragImageElementFn = this.$parse(dragImageElementId);
+
+        this.$scope.$apply(function() {
+            var elementId = dragImageElementFn(this.$this.$scope, {$event: e}),
+                dragElement;
+
+            if (!(this.$elementId && angular.isString(this.$elementId))) {
+                return;
+            }
+
+            dragElement = document.getElementById(this.$elementId);
+
+            if (!dragElement) {
+                return;
+            }
+
+            e.dataTransfer.setDragImage(dragElement, 0, 0);
+        });
+    }
+
+    public dragstartHandler(e) {
+        if(e.originalEvent) {
+            e.dataTransfer = e.originalEvent.dataTransfer;
+        }
+
+        var isDragAllowed = !isDragHandleUsed || dragTarget.classList.contains(dragHandleClass);
+
+        if (isDragAllowed) {
+            var sendChannel = this.$attrs.dragChannel || 'defaultchannel';
+            var dragData = '';
+            if (this.$attrs.drag) {
+                dragData = this.$this.$scope.$eval(this.$attrs.drag);
+            }
+
+            var dragImage = this.$attrs.dragImage || null;
+
+            this.$element.addClass(draggingClass);
+            this.$element.bind('$destroy', this.dragendHandler);
+
+            //Code to make sure that the setDragImage is available. IE 10, 11, and Opera do not support setDragImage.
+            var hasNativeDraggable = !(document.uniqueID || window.opera);
+
+            //If there is a draggable image passed in, then set the image to be dragged.
+            if (dragImage && hasNativeDraggable) {
+                var dragImageFn = this.$parse(this.$attrs.dragImage);
+                this.$scope.$apply(function() {
+                    var dragImageParameters = dragImageFn(this.$this.$scope, {$event: e});
+                    if (dragImageParameters) {
+                        if (angular.isString(dragImageParameters)) {
+                            dragImageParameters = $dragImage.generate(dragImageParameters);
+                        }
+                        if (dragImageParameters.image) {
+                            var xOffset = dragImageParameters.xOffset || 0,
+                                yOffset = dragImageParameters.yOffset || 0;
+                            e.dataTransfer.setDragImage(dragImageParameters.image, xOffset, yOffset);
+                        }
+                    }
+                });
+            } else if (this.$attrs.dragImagethis.$ElementId) {
+                this.setDragElement(e, this.$attrs.dragImagethis.$ElementId);
+            }
+
+            var offset = {x: e.offsetX, y: e.offsetY};
+            var transferDataObject = {data: dragData, channel: sendChannel, offset: offset};
+            var transferDataText = angular.toJson(transferDataObject);
+
+            e.dataTransfer.setData('text', transferDataText);
+            e.dataTransfer.effectAllowed = 'copyMove';
+
+            this.$rootscope.$broadcast('ANGULAR_DRAG_START', e, sendChannel, transferDataObject);
+        }
+        else {
+            e.preventDefault();
+        }
+    }
+
+}
+
+export class DragDropDirective implements ng.IDirective{
+    // Define our AppComponent's name
+    static directiveName:string = "uidragDrop";
+
+  /*
+    * This static method is needed to return instance
+    */
+    static instance() : ng.IDirective {
+        return new DragDropDirective;
     }
 
     
 
-            function setDragElement(e, dragImageElementId) {
-                var dragImageElementFn;
+  
 
-                if(e.originalEvent) {
-                  e.dataTransfer = e.originalEvent.dataTransfer;
-                }
+    
 
-                dragImageElementFn = $parse(dragImageElementId);
-
-                scope.$apply(function() {
-                    var elementId = dragImageElementFn(scope, {$event: e}),
-                        dragElement;
-
-                    if (!(elementId && angular.isString(elementId))) {
-                        return;
-                    }
-
-                    dragElement = document.getElementById(elementId);
-
-                    if (!dragElement) {
-                        return;
-                    }
-
-                    e.dataTransfer.setDragImage(dragElement, 0, 0);
-                });
-            }
-
+           
 
     restrict = 'E';
-    link(scope : ng.IScope, element : ng.IAugmentedJQuery, attrs : ng.IAttributes) {
-        var isDragHandleUsed = false,
-            dragHandleClass,
-            draggingClass = attrs.draggingClass || 'on-dragging',
-            dragTarget;
-
-        element.attr('draggable', false);
-
-        scope.$watch(attrs.uiDraggable, function(newValue) {
-            if (newValue) {
-                element.attr('draggable', newValue);
-                element.bind('dragend', dragendHandler);
-                element.bind('dragstart', dragstartHandler);
-            }
-            else {
-                element.removeAttr('draggable');
-                element.unbind('dragend', dragendHandler);
-                element.unbind('dragstart', dragstartHandler);
-            }
-
-        });
-
-        if (angular.isString(attrs.dragHandleClass)) {
-            isDragHandleUsed = true;
-            dragHandleClass = attrs.dragHandleClass.trim() || 'drag-handle';
-
-            element.bind('mousedown', function(e) {
-                dragTarget = e.target;
-            });
-        }
-    }
-
 }
 
 (function(angular) {
@@ -160,8 +211,8 @@ export class DragDropDirective implements ng.IDirective{
 
     var module = angular.module('ang-drag-drop', []);
 
-    module.directive('uiDraggable', ['$parse', '$rootScope', '$dragImage', function($parse, $rootScope, $dragImage) {
-        return function(scope, element, attrs) {
+    module.directive('uiDraggable', ['this.$parse', '$rootthis.$this.$scope', '$dragImage', function(this.$parse, $rootthis.$this.$scope, $dragImage) {
+        return function(this.$this.$scope, this.$element, this.$attrs) {
             
 
             
@@ -173,25 +224,25 @@ export class DragDropDirective implements ng.IDirective{
                 var isDragAllowed = !isDragHandleUsed || dragTarget.classList.contains(dragHandleClass);
 
                 if (isDragAllowed) {
-                    var sendChannel = attrs.dragChannel || 'defaultchannel';
+                    var sendChannel = this.$attrs.dragChannel || 'defaultchannel';
                     var dragData = '';
-                    if (attrs.drag) {
-                        dragData = scope.$eval(attrs.drag);
+                    if (this.$attrs.drag) {
+                        dragData = this.$this.$scope.$eval(this.$attrs.drag);
                     }
 
-                    var dragImage = attrs.dragImage || null;
+                    var dragImage = this.$attrs.dragImage || null;
 
-                    element.addClass(draggingClass);
-                    element.bind('$destroy', dragendHandler);
+                    this.$element.addClass(draggingClass);
+                    this.$element.bind('$destroy', dragendHandler);
 
                     //Code to make sure that the setDragImage is available. IE 10, 11, and Opera do not support setDragImage.
                     var hasNativeDraggable = !(document.uniqueID || window.opera);
 
                     //If there is a draggable image passed in, then set the image to be dragged.
                     if (dragImage && hasNativeDraggable) {
-                        var dragImageFn = $parse(attrs.dragImage);
-                        scope.$apply(function() {
-                            var dragImageParameters = dragImageFn(scope, {$event: e});
+                        var dragImageFn = this.$parse(this.$attrs.dragImage);
+                        this.$this.$scope.$apply(function() {
+                            var dragImageParameters = dragImageFn(this.$this.$scope, {$event: e});
                             if (dragImageParameters) {
                                 if (angular.isString(dragImageParameters)) {
                                     dragImageParameters = $dragImage.generate(dragImageParameters);
@@ -203,8 +254,8 @@ export class DragDropDirective implements ng.IDirective{
                                 }
                             }
                         });
-                    } else if (attrs.dragImageElementId) {
-                        setDragElement(e, attrs.dragImageElementId);
+                    } else if (this.$attrs.dragImagethis.$ElementId) {
+                        setDragthis.$Element(e, this.$attrs.dragImagethis.$ElementId);
                     }
 
                     var offset = {x: e.offsetX, y: e.offsetY};
@@ -214,7 +265,7 @@ export class DragDropDirective implements ng.IDirective{
                     e.dataTransfer.setData('text', transferDataText);
                     e.dataTransfer.effectAllowed = 'copyMove';
 
-                    $rootScope.$broadcast('ANGULAR_DRAG_START', e, sendChannel, transferDataObject);
+                    $rootthis.$this.$scope.$broadcast('ANGULAR_DRAG_START', e, sendChannel, transferDataObject);
                 }
                 else {
                     e.preventDefault();
@@ -224,15 +275,15 @@ export class DragDropDirective implements ng.IDirective{
     }
     ]);
 
-    module.directive('uiOnDrop', ['$parse', '$rootScope', function($parse, $rootScope) {
-        return function(scope, element, attr) {
+    module.directive('uiOnDrop', ['this.$parse', '$rootthis.$this.$scope', function(this.$parse, $rootthis.$this.$scope) {
+        return function(this.$this.$scope, this.$element, attr) {
             var dragging = 0; //Ref. http://stackoverflow.com/a/10906204
             var dropChannel = attr.dropChannel || 'defaultchannel';
             var dragChannel = '';
             var dragEnterClass = attr.dragEnterClass || 'on-drag-enter';
             var dragHoverClass = attr.dragHoverClass || 'on-drag-hover';
-            var customDragEnterEvent = $parse(attr.onDragEnter);
-            var customDragLeaveEvent = $parse(attr.onDragLeave);
+            var customDragEnterEvent = this.$parse(attr.onDragEnter);
+            var customDragLeaveEvent = this.$parse(attr.onDragLeave);
 
             function calculateDropOffset(e) {
                 var offset = {
@@ -241,7 +292,7 @@ export class DragDropDirective implements ng.IDirective{
                 };
                 var target = e.target;
 
-                while (target !== element[0]) {
+                while (target !== this.$element[0]) {
                     offset.x = offset.x + target.offsetLeft;
                     offset.y = offset.y + target.offsetTop;
 
@@ -263,9 +314,9 @@ export class DragDropDirective implements ng.IDirective{
                     e.stopPropagation();
                 }
 
-                var uiOnDragOverFn = $parse(attr.uiOnDragOver);
-                scope.$evalAsync(function() {
-                    uiOnDragOverFn(scope, {$event: e, $channel: dropChannel});
+                var uiOnDragOverFn = this.$parse(attr.uiOnDragOver);
+                this.$this.$scope.$evalAsync(function() {
+                    uiOnDragOverFn(this.$this.$scope, {$event: e, $channel: dropChannel});
                 });
 
                 return false;
@@ -282,16 +333,16 @@ export class DragDropDirective implements ng.IDirective{
                 dragging--;
 
                 if (dragging === 0) {
-                    scope.$evalAsync(function() {
-                        customDragLeaveEvent(scope, {$event: e, $channel: dropChannel});
+                    this.$this.$scope.$evalAsync(function() {
+                        customDragLeaveEvent(this.$this.$scope, {$event: e, $channel: dropChannel});
                     });
-                    element.addClass(dragEnterClass);
-                    element.removeClass(dragHoverClass);
+                    this.$element.addClass(dragEnterClass);
+                    this.$element.removeClass(dragHoverClass);
                 }
 
-                var uiOnDragLeaveFn = $parse(attr.uiOnDragLeave);
-                scope.$evalAsync(function() {
-                    uiOnDragLeaveFn(scope, {$event: e, $channel: dropChannel});
+                var uiOnDragLeaveFn = this.$parse(attr.uiOnDragLeave);
+                this.$this.$scope.$evalAsync(function() {
+                    uiOnDragLeaveFn(this.$this.$scope, {$event: e, $channel: dropChannel});
                 });
             }
 
@@ -305,20 +356,20 @@ export class DragDropDirective implements ng.IDirective{
                 }
 
                 if (dragging === 0) {
-                    scope.$evalAsync(function() {
-                        customDragEnterEvent(scope, {$event: e, $channel: dropChannel});
+                    this.$this.$scope.$evalAsync(function() {
+                        customDragEnterEvent(this.$this.$scope, {$event: e, $channel: dropChannel});
                     });
-                    element.removeClass(dragEnterClass);
-                    element.addClass(dragHoverClass);
+                    this.$element.removeClass(dragEnterClass);
+                    this.$element.addClass(dragHoverClass);
                 }
                 dragging++;
 
-                var uiOnDragEnterFn = $parse(attr.uiOnDragEnter);
-                scope.$evalAsync(function() {
-                    uiOnDragEnterFn(scope, {$event: e, $channel: dropChannel});
+                var uiOnDragEnterFn = this.$parse(attr.uiOnDragEnter);
+                this.$this.$scope.$evalAsync(function() {
+                    uiOnDragEnterFn(this.$this.$scope, {$event: e, $channel: dropChannel});
                 });
 
-                $rootScope.$broadcast('ANGULAR_HOVER', dragChannel);
+                $rootthis.$this.$scope.$broadcast('ANGULAR_HOVER', dragChannel);
             }
 
             function onDrop(e) {
@@ -345,11 +396,11 @@ export class DragDropDirective implements ng.IDirective{
                 
                 determineEffectAllowed(e);
 
-                var uiOnDropFn = $parse(attr.uiOnDrop);
-                scope.$evalAsync(function() {
-                    uiOnDropFn(scope, {$data: sendData.data, $event: e, $channel: sendData.channel, $position: position});
+                var uiOnDropFn = this.$parse(attr.uiOnDrop);
+                this.$this.$scope.$evalAsync(function() {
+                    uiOnDropFn(this.$this.$scope, {$data: sendData.data, $event: e, $channel: sendData.channel, $position: position});
                 });
-                element.removeClass(dragEnterClass);
+                this.$element.removeClass(dragEnterClass);
                 dragging = 0;
             }
             
@@ -378,7 +429,7 @@ export class DragDropDirective implements ng.IDirective{
                 return false;
             }
 
-            var deregisterDragStart = $rootScope.$on('ANGULAR_DRAG_START', function(_, e, channel, transferDataObject) {
+            var deregisterDragStart = $rootthis.$this.$scope.$on('ANGULAR_DRAG_START', function(_, e, channel, transferDataObject) {
                 dragChannel = channel;
 
                 var valid = true;
@@ -388,9 +439,9 @@ export class DragDropDirective implements ng.IDirective{
                 }
 
                 if (valid && attr.dropValidate) {
-                    var validateFn = $parse(attr.dropValidate);
-                    valid = validateFn(scope, {
-                        $drop: {scope: scope, element: element},
+                    var validateFn = this.$parse(attr.dropValidate);
+                    valid = validateFn(this.$this.$scope, {
+                        $drop: {this.$this.$scope: this.$this.$scope, this.$element: this.$element},
                         $event: e,
                         $data: transferDataObject.data,
                         $channel: transferDataObject.channel
@@ -398,40 +449,40 @@ export class DragDropDirective implements ng.IDirective{
                 }
 
                 if (valid) {
-                    element.bind('dragover', onDragOver);
-                    element.bind('dragenter', onDragEnter);
-                    element.bind('dragleave', onDragLeave);
-                    element.bind('drop', onDrop);
+                    this.$element.bind('dragover', onDragOver);
+                    this.$element.bind('dragenter', onDragEnter);
+                    this.$element.bind('dragleave', onDragLeave);
+                    this.$element.bind('drop', onDrop);
 
-                    element.addClass(dragEnterClass);
+                    this.$element.addClass(dragEnterClass);
                 } else {
-                    element.bind('dragover', preventNativeDnD);
-                    element.bind('dragenter', preventNativeDnD);
-                    element.bind('dragleave', preventNativeDnD);
-                    element.bind('drop', preventNativeDnD);
+                    this.$element.bind('dragover', preventNativeDnD);
+                    this.$element.bind('dragenter', preventNativeDnD);
+                    this.$element.bind('dragleave', preventNativeDnD);
+                    this.$element.bind('drop', preventNativeDnD);
 
-                    element.removeClass(dragEnterClass);
+                    this.$element.removeClass(dragEnterClass);
                 }
 
             });
 
 
-            var deregisterDragEnd = $rootScope.$on('ANGULAR_DRAG_END', function() {
-                element.unbind('dragover', onDragOver);
-                element.unbind('dragenter', onDragEnter);
-                element.unbind('dragleave', onDragLeave);
+            var deregisterDragEnd = $rootthis.$this.$scope.$on('ANGULAR_DRAG_END', function() {
+                this.$element.unbind('dragover', onDragOver);
+                this.$element.unbind('dragenter', onDragEnter);
+                this.$element.unbind('dragleave', onDragLeave);
 
-                element.unbind('drop', onDrop);
-                element.removeClass(dragHoverClass);
-                element.removeClass(dragEnterClass);
+                this.$element.unbind('drop', onDrop);
+                this.$element.removeClass(dragHoverClass);
+                this.$element.removeClass(dragEnterClass);
 
-                element.unbind('dragover', preventNativeDnD);
-                element.unbind('dragenter', preventNativeDnD);
-                element.unbind('dragleave', preventNativeDnD);
-                element.unbind('drop', preventNativeDnD);
+                this.$element.unbind('dragover', preventNativeDnD);
+                this.$element.unbind('dragenter', preventNativeDnD);
+                this.$element.unbind('dragleave', preventNativeDnD);
+                this.$element.unbind('drop', preventNativeDnD);
             });
 
-            scope.$on('$destroy', function() {
+            this.$this.$scope.$on('$destroy', function() {
                 deregisterDragStart();
                 deregisterDragEnd();
             });
@@ -476,7 +527,7 @@ export class DragDropDirective implements ng.IDirective{
 
         this.generate = function(text, options) {
             var config = angular.extend({}, defaultConfig, options || {});
-            var el = document.createElement('canvas');
+            var el = document.createthis.$Element('canvas');
 
             el.height = config.height;
             el.width = config.width;
