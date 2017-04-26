@@ -1,4 +1,4 @@
-<div class="row" *ngFor="let item of lists">
+<div class="row" *ngFor="let item of lists" (click)="selectUser(item)" [ngClass]="{'selected': item.name === selected}">
     <div class="left-cell">
         <md-icon svgIcon="{{item.avatar}}" class="avatar"></md-icon>
     </div>

@@ -5,15 +5,15 @@ import { HttpModule } from '@angular/http';
 import {MaterialModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
-import { MySidebarComponent } from './my-sidebar/my-sidebar.component';
 import { ContentTabComponent } from './content-tab/content-tab.component';
 import { ContentService } from './services/content.service';
+import { UsersListComponent } from './users-list/users-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MySidebarComponent,
-    ContentTabComponent
+    ContentTabComponent,
+    UsersListComponent
   ],
   imports: [
     BrowserModule,

@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser'
 import {MdIconRegistry} from '@angular/material';
 import { IContent, ContentService } from '../services/content.service';
 
 @Component({
   selector: 'app-content-tab',
+  inputs:['selected'],
+  outputs:['selectUser'],
   templateUrl: './content-tab.component.html',
   styleUrls: ['./content-tab.component.less']
 })
 export class ContentTabComponent implements OnInit {
   private lists:IContent[] = [];
 
+  selected: string;
+  selectItem: EventEmitter<string>;
   constructor(private content: ContentService,
               mdIconRegistry: MdIconRegistry,
               sanitizer: DomSanitizer) 
@@ -23,6 +27,7 @@ export class ContentTabComponent implements OnInit {
       .addSvgIcon("hangouts", sanitizer.bypassSecurityTrustResourceUrl("./assets/svg/hangouts.svg"))
       .addSvgIcon("twitter", sanitizer.bypassSecurityTrustResourceUrl("./assets/svg/twitter.svg"))
       .addSvgIcon("phone", sanitizer.bypassSecurityTrustResourceUrl("./assets/svg/phone.svg"));
+    this.selectItem = new EventEmitter();
                
   }
 
@@ -34,4 +39,7 @@ export class ContentTabComponent implements OnInit {
     });
   }
 
+  selectUser(list){
+    this.selectItem.emit(list.name);
+  }
 }
