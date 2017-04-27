@@ -15,10 +15,7 @@
           <p class="left">PICTURES</p>
           <p class="rightpart">NAMES</p>
         </div>
-        <p>It's for Object items list</p>
-        <p>It's for Object items list</p>
-        <p>It's for Object items list</p>
-        <p>It's for Object items list</p>
+        <app-desk [selected]= "selected"></app-desk>
       </div>
       <div class="canvas">
       </div>
@@ -28,6 +25,6 @@
   </div>
   
   <div id=sidebar class="huiborder-top" data-sidebar="expanded">
-    <app-content-tab class="tab-container"></app-content-tab>
+    <app-content-tab class="tab-container" (onSelect) = "selectItem($event)" [selected]="selected" ></app-content-tab>
   </div>
 </div>

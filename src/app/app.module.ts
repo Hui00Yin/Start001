@@ -7,13 +7,15 @@ import {MaterialModule} from '@angular/material';
 import { AppComponent } from './app.component';
 import { ContentTabComponent } from './content-tab/content-tab.component';
 import { ContentService } from './services/content.service';
-import { UsersListComponent } from './users-list/users-list.component';
+import { DisplayResourceService } from './services/display-resource.service';
+import { DeskComponent } from './desk/desk.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     ContentTabComponent,
-    UsersListComponent
+    DeskComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +23,7 @@ import { UsersListComponent } from './users-list/users-list.component';
     HttpModule,
     MaterialModule.forRoot()
   ],
-  providers: [ContentService],
+  providers: [ContentService, DisplayResourceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { IContent } from './services/content.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app works!';
+  selected:string;
+
+  selectItem(message: string){
+    this.selected = message;
+  }
 }
