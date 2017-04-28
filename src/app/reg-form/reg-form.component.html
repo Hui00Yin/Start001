@@ -1,0 +1,37 @@
+<form (ngSubmit)="onSubmit($event)" [formGroup]="parent">
+      <h2>Enter your details</h2>
+      <div class="section" formGroupName="details">
+        <div class="input">
+          <label>
+            Name <span class="required">*</span>
+            <span *ngIf="parent.get('details').get('name').hasError('required') && parent.get('details').get('name').touched" class="error">
+              Field is required
+            </span>
+          </label>
+          <input formControlName="name" type="text" placeholder="Hui Yin">
+        </div>
+        <div class="input">
+          <label>
+            Email <span class="required">*</span>
+            <span *ngIf="parent.get('details').get('email').errors && parent.get('details').get('email').touched" class="error">
+              Field is required
+            </span>
+          </label>
+          <input formControlName="email" type="email" placeholder="Enter your email">
+        </div>
+       <div class="input">
+          <label>
+            Confirm <span class="required">*</span>
+            <!--<span *ngIf="parent.get('details').get('confirm').errors && parent.get('details').get('confirm').touched" class="error" class="error">
+              <span *ngIf="parent.get('details').get('confirm').hasError('required')">
+                Field is required
+              </span>
+            </span>
+            <span *ngIf="pareent.get('details').get('confirm').hasError('required') && parent.get('details').touched && parent.get('details').hasError('nomatch')">
+              Emails must match
+            </span>-->
+          </label>
+          <input formControlName="confirm" type="email" placeholder="Confirm your email">
+        </div>
+      </div>
+</form>

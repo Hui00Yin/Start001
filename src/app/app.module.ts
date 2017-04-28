@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {MaterialModule} from '@angular/material';
 
@@ -9,17 +9,22 @@ import { ContentTabComponent } from './content-tab/content-tab.component';
 import { ContentService } from './services/content.service';
 import { DisplayResourceService } from './services/display-resource.service';
 import { DeskComponent } from './desk/desk.component';
+import { RegFormComponent } from './reg-form/reg-form.component';
+import { FormContainerComponent } from './form-container/form-container.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ContentTabComponent,
-    DeskComponent
+    DeskComponent,
+    RegFormComponent,
+    FormContainerComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     MaterialModule.forRoot()
   ],
