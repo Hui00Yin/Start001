@@ -19,7 +19,10 @@ export class FormContainerComponent implements OnInit {
       details: this.fb.group({
         name:['',Validators.required],
         email:['', Validators.required],
-        confirm:['', Validators.required]
+        confirm:['', Validators.required],
+        phone:['', Validators.required],
+        address:['', [Validators.required, Validators.minLength(3)]],
+        postcode:['', [Validators.required, Validators.minLength(3)]]        
       })
     }, {})
   }

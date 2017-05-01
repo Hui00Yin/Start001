@@ -19,9 +19,36 @@ export class RegFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  onsubmit(event){
+
+  @Input()
+  total: string;
+
+  @Input()
+  prices: any;
+
+  @Output()
+  add = new EventEmitter<any>();
+
+  @Output()
+  remove = new EventEmitter<any>();
+
+  @Output()
+  toggle = new EventEmitter<number>();
+
+  onAddPizza(event) {
+    this.add.emit(event);
+  }
+
+  onRemovePizza(event) {
+    this.remove.emit(event);
+  }
+
+  onToggle(event) {
+    this.toggle.emit(event);
+  }
+
+  onSubmit(event) {
     event.stopPropagation();
     this.submit.emit(this.parent);
   }
-
 }

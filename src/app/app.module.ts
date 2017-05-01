@@ -11,6 +11,7 @@ import { DisplayResourceService } from './services/display-resource.service';
 import { DeskComponent } from './desk/desk.component';
 import { RegFormComponent } from './reg-form/reg-form.component';
 import { FormContainerComponent } from './form-container/form-container.component';
+import { PCreatorComponent } from './p-creator/p-creator.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { FormContainerComponent } from './form-container/form-container.componen
     ContentTabComponent,
     DeskComponent,
     RegFormComponent,
-    FormContainerComponent
+    FormContainerComponent,
+    PCreatorComponent
   ],
   imports: [
     BrowserModule,
